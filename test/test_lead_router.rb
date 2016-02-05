@@ -20,24 +20,24 @@ class LeadRouterTest < Minitest::Test
   end
 
   def test_update_lead
-    lr = LeadRouter.new("leadrouter.com", "LeadManager", "secret")
-    lr.expects(:request).with(:patch,  "http://LeadManager:secret@leadrouter.com/rest/sites/site-123/leads/lead-abc",
+    lr = LeadRouter.new("api.com", "LM", "secret")
+    lr.expects(:request).with(:patch,  "http://api.com/rest/sites/site-123/leads/lead-abc",
                              '{"email":"lead@gmail.com"}')
 
     lr.update_lead("site-123", "lead-abc", {email: "lead@gmail.com"})
   end
 
   def test_add_activities
-    lr = LeadRouter.new("leadrouter.com", "LeadManager", "secret")
-    lr.expects(:request).with(:post, "http://LeadManager:secret@leadrouter.com/rest/sites/site-123/leads/lead-abc/activities",
+    lr = LeadRouter.new("api.com", "LM", "secret")
+    lr.expects(:request).with(:post, "http://api.com/rest/sites/site-123/leads/lead-abc/activities",
                               '[{"type":"one"},{"type":"two"}]')
 
     lr.add_activities("site-123", "lead-abc", [{'type' => 'one'}, {'type' => 'two'}])
   end
 
   def test_add_potential_seller_lead
-    lr = LeadRouter.new("leadrouter.com", "LeadManager", "secret")
-    lr.expects(:request).with(:post, "http://LeadManager:secret@leadrouter.com/rest/sites/site-123/potential-seller-leads",
+    lr = LeadRouter.new("api.com", "LM", "secret")
+    lr.expects(:request).with(:post, "http://api.com/rest/sites/site-123/potential-seller-leads",
                               '{"id":"abc"}')
 
     lr.create_potential_seller_lead("site-123", {id: "abc"})
