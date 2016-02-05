@@ -36,6 +36,8 @@ module LeadRouter
         :user => @user,
         :password => @token
       )
+    rescue ::Exception => ex
+      raise LeadRouter::Exception, ex
     end
 
   end

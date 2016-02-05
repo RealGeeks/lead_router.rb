@@ -49,10 +49,33 @@ class LeadRouterTest < Minitest::Test
   def test_request
     stub_request(:any, /.*/)
 
-    lr = LeadRouter.new("leadrouter.com", "LM", "secret")
-    lr.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
+    client.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
 
     assert_request_performed(:post, "http://LM:secret@api.com/leads", '{"id":"123"}')
+  end
+
+  def test_request_invalid_status_code
+    stub_request(:any, /.*/).to_return(status: 401, body: '{"error":"unauthorized"}')
+
+    ex = assert_raises {
+      client.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
+    }
+
+    assert_equal LeadRouter::Exception, ex.class
+    assert_equal 401, ex.http_code
+    assert_equal '{"error":"unauthorized"}', ex.http_body
+  end
+
+  def test_request_other_exceptions
+    RestClient::Request.stubs(:execute).raises(RuntimeError.new("something bad"))
+
+    ex = assert_raises {
+      client.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
+    }
+
+    assert_equal LeadRouter::Exception, ex.class
+    assert_equal 0, ex.http_code
+    assert_equal "", ex.http_body
   end
 
   #
