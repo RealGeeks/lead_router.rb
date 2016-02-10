@@ -10,18 +10,24 @@ module LeadRouter
     end
 
     def create_lead(site_uuid, lead)
+      require_arg "site_uuid", site_uuid
       request :post, "http://#{@host}/rest/sites/#{site_uuid}/leads", lead.to_json
     end
 
     def update_lead(site_uuid, lead_uuid, lead)
+      require_arg "site_uuid", site_uuid
+      require_arg "lead_uuid", lead_uuid
       request :patch, "http://#{@host}/rest/sites/#{site_uuid}/leads/#{lead_uuid}", lead.to_json
     end
 
     def add_activities(site_uuid, lead_uuid, activities)
+      require_arg "site_uuid", site_uuid
+      require_arg "lead_uuid", lead_uuid
       request :post, "http://#{@host}/rest/sites/#{site_uuid}/leads/#{lead_uuid}/activities", activities.to_json
     end
 
     def create_potential_seller_lead(site_uuid, lead)
+      require_arg "site_uuid", site_uuid
       request :post, "http://#{@host}/rest/sites/#{site_uuid}/potential-seller-leads", lead.to_json
     end
 
@@ -38,6 +44,10 @@ module LeadRouter
       )
     rescue ::Exception => ex
       raise LeadRouter::Exception, ex
+    end
+
+    def require_arg(name, value)
+      raise LeadRouter::Exception, ArgumentError.new("#{name} cannot be nil") if value.nil?
     end
 
   end

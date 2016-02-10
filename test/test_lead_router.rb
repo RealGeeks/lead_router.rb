@@ -42,6 +42,25 @@ class LeadRouterTest < Minitest::Test
     client.create_potential_seller_lead("site-123", {id: "abc"})
   end
 
+  def test_required_arguments
+    # make sure I have a nice error message if caller gives me nil for required arguments
+    client.stubs(:request)
+
+    tests = [
+      ["site_uuid cannot be nil", Proc.new { client.create_lead(nil, {}) }],
+      ["site_uuid cannot be nil", Proc.new { client.update_lead(nil, "lead-abc", {}) }],
+      ["lead_uuid cannot be nil", Proc.new { client.update_lead("site-123", nil, {}) }],
+      ["site_uuid cannot be nil", Proc.new { client.create_potential_seller_lead(nil, {}) }],
+      ["site_uuid cannot be nil", Proc.new { client.add_activities(nil, "lead-abc", []) }],
+      ["lead_uuid cannot be nil", Proc.new { client.add_activities("site-123", nil, []) }],
+    ]
+
+    tests.each do |error_message, test|
+      ex = assert_raises(LeadRouter::Exception) { test.call }
+      assert_equal error_message, ex.to_s
+    end
+  end
+
   #
   # Test 'request' method
   #
@@ -57,11 +76,10 @@ class LeadRouterTest < Minitest::Test
   def test_request_invalid_status_code
     stub_request(:any, /.*/).to_return(status: 401, body: '{"error":"unauthorized"}')
 
-    ex = assert_raises {
+    ex = assert_raises LeadRouter::Exception do
       client.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
-    }
+    end
 
-    assert_equal LeadRouter::Exception, ex.class
     assert_equal 401, ex.http_code
     assert_equal '{"error":"unauthorized"}', ex.http_body
   end
@@ -69,11 +87,10 @@ class LeadRouterTest < Minitest::Test
   def test_request_other_exceptions
     RestClient::Request.stubs(:execute).raises(RuntimeError.new("something bad"))
 
-    ex = assert_raises {
+    ex = assert_raises LeadRouter::Exception do
       client.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
-    }
+    end
 
-    assert_equal LeadRouter::Exception, ex.class
     assert_equal 0, ex.http_code
     assert_equal "", ex.http_body
   end
