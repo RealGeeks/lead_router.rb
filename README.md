@@ -1,6 +1,8 @@
-# Ruby client to Lead Router REST API
+# Ruby client to Real Geeks Leads API
 
-Send leads and activities to Lead Router
+Send leads and activities to Lead Router, the Real Geeks Leads API.
+
+For more details see [our documentation](http://docs.realgeeks.com/outgoing_leads_api_developers).
 
 ## Installation
 
@@ -22,9 +24,13 @@ Or install it yourself as:
 
 First get a user and token from the `lead_router` project, it will identify your project and which permissions you have.
 
-    require 'lead_router'
+If you're a Real Geeks client send a message to [support](https://www.realgeeks.com/support/) and we'll give you credentials.
 
-    lr = LeadRouter.new("receiver.leadrouter.realgeeks.com", "user", "token")
+```ruby
+require 'lead_router'
+
+lr = LeadRouter.new("receivers.leadrouter.realgeeks.com", "user", "token")
+```
 
 with a client created use one the methods below. For details on which fields
 you can send for a `lead` or an `activity`, see our [API docs](http://docs.realgeeks.com/incoming_leads_api)
