@@ -31,9 +31,23 @@ module LeadRouter
       request :post, "http://#{@host}/rest/sites/#{site_uuid}/potential-seller-leads", lead.to_json
     end
 
+    def update_user(site_uuid, locutus_id, user)
+      require_arg "site_uuid", site_uuid
+      require_arg "locutus_id", locutus_id
+      # build name via first/last_name
+      first = user.delete(:first_name)
+      last  = user.delete(:last_name)
+
+      # but always use name param if given
+      user['name'] ||= "#{first} #{last}" unless first.nil? || last.nil?
+
+      request :patch, "http://#{@host}/rest/sites/#{site_uuid}/users/#{locutus_id}", user.to_json
+    end
+
     private
 
     def request(method, url, body)
+      puts "request!!!!"
       RestClient::Request.execute(
         :method => method,
         :url => url,

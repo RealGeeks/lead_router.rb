@@ -28,6 +28,12 @@ class LeadRouterTest < Minitest::Test
     client.update_lead("site-123", "lead-abc", {email: "lead@gmail.com"})
   end
 
+  def test_update_user
+    client.expects(:request).with(:patch, "http://api.com/rest/sites/site-123/users/1234", '{"name":"Bob Saget"}')
+
+    client.update_user("site-123", "1234", {first_name: "Bob", last_name: "Saget"})
+  end
+
   def test_add_activities
     client.expects(:request).with(:post, "http://api.com/rest/sites/site-123/leads/lead-abc/activities",
                                   '[{"type":"one"},{"type":"two"}]')
@@ -52,7 +58,9 @@ class LeadRouterTest < Minitest::Test
       ["lead_uuid cannot be nil", Proc.new { client.update_lead("site-123", nil, {}) }],
       ["site_uuid cannot be nil", Proc.new { client.create_potential_seller_lead(nil, {}) }],
       ["site_uuid cannot be nil", Proc.new { client.add_activities(nil, "lead-abc", []) }],
+      ["site_uuid cannot be nil", Proc.new { client.update_user(nil, 1234, {}) }],
       ["lead_uuid cannot be nil", Proc.new { client.add_activities("site-123", nil, []) }],
+      ["locutus_id cannot be nil", Proc.new { client.update_user("site-123", nil, {}) }],
     ]
 
     tests.each do |error_message, test|
