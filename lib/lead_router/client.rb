@@ -31,6 +31,16 @@ module LeadRouter
       request :post, "http://#{@host}/rest/sites/#{site_uuid}/potential-seller-leads", lead.to_json
     end
 
+    # Send a request to update a user
+    #
+    # For now the lead manager is allowed to send this request, every other
+    # client will get 403
+    #
+    # Must be called with the full user object, all fields. See all fields
+    # in: https://developers.realgeeks.com/users/
+    #
+    # 'name' could be provided as 'first_name' and 'last_name', they will be
+    # combined as 'name'
     def update_user(site_uuid, locutus_id, user)
       require_arg "site_uuid", site_uuid
       require_arg "locutus_id", locutus_id
@@ -42,7 +52,7 @@ module LeadRouter
       user['name'] ||= first unless first.nil?
       user['name'] += " #{last}" unless last.nil?
 
-      request :patch, "http://#{@host}/rest/sites/#{site_uuid}/users/#{locutus_id}", user.to_json
+      request :put, "http://#{@host}/rest/sites/#{site_uuid}/users/#{locutus_id}", user.to_json
     end
 
     private

@@ -29,21 +29,21 @@ class LeadRouterTest < Minitest::Test
   end
 
   def test_update_user
-    client.expects(:request).with(:patch, "http://api.com/rest/sites/site-123/users/1234",
+    client.expects(:request).with(:put, "http://api.com/rest/sites/site-123/users/1234",
                                   '{"name":"Kat","email":"kat@mail.com"}')
 
     client.update_user("site-123", "1234", {name: "Kat", email: "kat@mail.com"})
   end
 
   def test_update_user_combines_name_from_first_and_last_names
-    client.expects(:request).with(:patch, "http://api.com/rest/sites/site-123/users/1234",
+    client.expects(:request).with(:put, "http://api.com/rest/sites/site-123/users/1234",
                                   '{"email":"bob@mail.com","name":"Bob Saget"}')
 
     client.update_user("site-123", "1234", {first_name: "Bob", last_name: "Saget", email: "bob@mail.com"})
   end
 
   def test_update_user_uses_first_name_even_if_last_name_not_provided
-    client.expects(:request).with(:patch, "http://api.com/rest/sites/site-123/users/1234",
+    client.expects(:request).with(:put, "http://api.com/rest/sites/site-123/users/1234",
                                   '{"email":"bob@mail.com","name":"Bob"}')
 
     client.update_user("site-123", "1234", {first_name: "Bob", email: "bob@mail.com"})
@@ -51,7 +51,7 @@ class LeadRouterTest < Minitest::Test
 
   def test_update_user_dont_modify_hash_provided
     user = {first_name: "Kat", email: "kat@mail.com"}
-    client.expects(:request).with(:patch, "http://api.com/rest/sites/site-123/users/1234",
+    client.expects(:request).with(:put, "http://api.com/rest/sites/site-123/users/1234",
                                   '{"email":"kat@mail.com","name":"Kat"}')
 
     client.update_user("site-123", "1234", user)
