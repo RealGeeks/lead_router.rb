@@ -47,7 +47,6 @@ module LeadRouter
     private
 
     def request(method, url, body)
-      puts "request!!!!"
       RestClient::Request.execute(
         :method => method,
         :url => url,
