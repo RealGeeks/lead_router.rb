@@ -85,7 +85,7 @@ class LeadRouterTest < Minitest::Test
       ["site_uuid cannot be nil", Proc.new { client.add_activities(nil, "lead-abc", []) }],
       ["site_uuid cannot be nil", Proc.new { client.update_user(nil, 1234, {}) }],
       ["lead_uuid cannot be nil", Proc.new { client.add_activities("site-123", nil, []) }],
-      ["locutus_id cannot be nil", Proc.new { client.update_user("site-123", nil, {}) }],
+      ["user_id cannot be nil",   Proc.new { client.update_user("site-123", nil, {}) }],
     ]
 
     tests.each do |error_message, test|
