@@ -34,12 +34,13 @@ module LeadRouter
     def update_user(site_uuid, locutus_id, user)
       require_arg "site_uuid", site_uuid
       require_arg "locutus_id", locutus_id
-      # build name via first/last_name
+
+      # if name not set try to use first_name and last_name
+      user = user.clone
       first = user.delete(:first_name)
       last  = user.delete(:last_name)
-
-      # but always use name param if given
-      user['name'] ||= "#{first} #{last}" unless first.nil? || last.nil?
+      user['name'] ||= first unless first.nil?
+      user['name'] += " #{last}" unless last.nil?
 
       request :patch, "http://#{@host}/rest/sites/#{site_uuid}/users/#{locutus_id}", user.to_json
     end
