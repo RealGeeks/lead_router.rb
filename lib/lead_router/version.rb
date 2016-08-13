@@ -1,3 +1,3 @@
 module LeadRouter
-  VERSION = "0.2.1"
+  VERSION = "1.1.1"
 end
