@@ -17,6 +17,7 @@ module LeadRouter
     end
 
     def to_s
+      return "#{original_exception.to_s}: HTTP status #{http_code} with body #{http_body}" unless http_code == 0
       original_exception.to_s
     end
 
