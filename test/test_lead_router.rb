@@ -15,35 +15,35 @@ class LeadRouterTest < Minitest::Test
   #
 
   def test_create_lead
-    client.expects(:request).with(:post, 'http://api.com/rest/sites/site-123/leads',
+    client.expects(:request).with(:post, 'https://api.com/rest/sites/site-123/leads',
                                   '{"email":"lead@gmail.com"}')
 
     client.create_lead("site-123", {email: "lead@gmail.com"})
   end
 
   def test_update_lead
-    client.expects(:request).with(:patch,  "http://api.com/rest/sites/site-123/leads/lead-abc",
+    client.expects(:request).with(:patch,  "https://api.com/rest/sites/site-123/leads/lead-abc",
                                   '{"email":"lead@gmail.com"}')
 
     client.update_lead("site-123", "lead-abc", {email: "lead@gmail.com"})
   end
 
   def test_update_user
-    client.expects(:request).with(:put, "http://api.com/rest/sites/site-123/users/1234",
+    client.expects(:request).with(:put, "https://api.com/rest/sites/site-123/users/1234",
                                   '{"name":"Kat","email":"kat@mail.com"}')
 
     client.update_user("site-123", "1234", {name: "Kat", email: "kat@mail.com"})
   end
 
   def test_update_user_combines_name_from_first_and_last_names
-    client.expects(:request).with(:put, "http://api.com/rest/sites/site-123/users/1234",
+    client.expects(:request).with(:put, "https://api.com/rest/sites/site-123/users/1234",
                                   '{"email":"bob@mail.com","name":"Bob Saget"}')
 
     client.update_user("site-123", "1234", {first_name: "Bob", last_name: "Saget", email: "bob@mail.com"})
   end
 
   def test_update_user_uses_first_name_even_if_last_name_not_provided
-    client.expects(:request).with(:put, "http://api.com/rest/sites/site-123/users/1234",
+    client.expects(:request).with(:put, "https://api.com/rest/sites/site-123/users/1234",
                                   '{"email":"bob@mail.com","name":"Bob"}')
 
     client.update_user("site-123", "1234", {first_name: "Bob", email: "bob@mail.com"})
@@ -51,7 +51,7 @@ class LeadRouterTest < Minitest::Test
 
   def test_update_user_dont_modify_hash_provided
     user = {first_name: "Kat", email: "kat@mail.com"}
-    client.expects(:request).with(:put, "http://api.com/rest/sites/site-123/users/1234",
+    client.expects(:request).with(:put, "https://api.com/rest/sites/site-123/users/1234",
                                   '{"email":"kat@mail.com","name":"Kat"}')
 
     client.update_user("site-123", "1234", user)
@@ -60,14 +60,14 @@ class LeadRouterTest < Minitest::Test
   end
 
   def test_add_activities
-    client.expects(:request).with(:post, "http://api.com/rest/sites/site-123/leads/lead-abc/activities",
+    client.expects(:request).with(:post, "https://api.com/rest/sites/site-123/leads/lead-abc/activities",
                                   '[{"type":"one"},{"type":"two"}]')
 
     client.add_activities("site-123", "lead-abc", [{'type' => 'one'}, {'type' => 'two'}])
   end
 
   def test_add_potential_seller_lead
-    client.expects(:request).with(:post, "http://api.com/rest/sites/site-123/potential-seller-leads",
+    client.expects(:request).with(:post, "https://api.com/rest/sites/site-123/potential-seller-leads",
                                   '{"id":"abc"}')
 
     client.create_potential_seller_lead("site-123", {id: "abc"})
@@ -101,16 +101,16 @@ class LeadRouterTest < Minitest::Test
   def test_request
     stub_request(:any, /.*/)
 
-    client.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
+    client.send(:request, :post, "https://api.com/leads", '{"id":"123"}')
 
-    assert_request_performed(:post, "http://LM:secret@api.com/leads", '{"id":"123"}')
+    assert_request_performed(:post, "https://LM:secret@api.com/leads", '{"id":"123"}')
   end
 
   def test_request_invalid_status_code
     stub_request(:any, /.*/).to_return(status: 401, body: '{"error":"unauthorized"}')
 
     ex = assert_raises LeadRouter::Exception do
-      client.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
+      client.send(:request, :post, "https://api.com/leads", '{"id":"123"}')
     end
 
     assert_equal 401, ex.http_code
@@ -121,7 +121,7 @@ class LeadRouterTest < Minitest::Test
     RestClient::Request.stubs(:execute).raises(RuntimeError.new("something bad"))
 
     ex = assert_raises LeadRouter::Exception do
-      client.send(:request, :post, "http://api.com/leads", '{"id":"123"}')
+      client.send(:request, :post, "https://api.com/leads", '{"id":"123"}')
     end
 
     assert_equal 0, ex.http_code

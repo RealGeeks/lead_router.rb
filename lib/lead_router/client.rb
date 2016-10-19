@@ -11,24 +11,24 @@ module LeadRouter
 
     def create_lead(site_uuid, lead)
       require_arg "site_uuid", site_uuid
-      request :post, "http://#{@host}/rest/sites/#{site_uuid}/leads", lead.to_json
+      request :post, "https://#{@host}/rest/sites/#{site_uuid}/leads", lead.to_json
     end
 
     def update_lead(site_uuid, lead_uuid, lead)
       require_arg "site_uuid", site_uuid
       require_arg "lead_uuid", lead_uuid
-      request :patch, "http://#{@host}/rest/sites/#{site_uuid}/leads/#{lead_uuid}", lead.to_json
+      request :patch, "https://#{@host}/rest/sites/#{site_uuid}/leads/#{lead_uuid}", lead.to_json
     end
 
     def add_activities(site_uuid, lead_uuid, activities)
       require_arg "site_uuid", site_uuid
       require_arg "lead_uuid", lead_uuid
-      request :post, "http://#{@host}/rest/sites/#{site_uuid}/leads/#{lead_uuid}/activities", activities.to_json
+      request :post, "https://#{@host}/rest/sites/#{site_uuid}/leads/#{lead_uuid}/activities", activities.to_json
     end
 
     def create_potential_seller_lead(site_uuid, lead)
       require_arg "site_uuid", site_uuid
-      request :post, "http://#{@host}/rest/sites/#{site_uuid}/potential-seller-leads", lead.to_json
+      request :post, "https://#{@host}/rest/sites/#{site_uuid}/potential-seller-leads", lead.to_json
     end
 
     # Send a request to update a user
@@ -52,7 +52,7 @@ module LeadRouter
       user['name'] ||= first unless first.nil?
       user['name'] += " #{last}" unless last.nil?
 
-      request :put, "http://#{@host}/rest/sites/#{site_uuid}/users/#{user_id}", user.to_json
+      request :put, "https://#{@host}/rest/sites/#{site_uuid}/users/#{user_id}", user.to_json
     end
 
     private
