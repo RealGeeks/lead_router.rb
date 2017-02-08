@@ -10,6 +10,7 @@ module LeadRouter
     end
 
     def create_lead(site_uuid, lead, destinations=[])
+      destinations ||= []
       require_arg "site_uuid", site_uuid
       dest_headers = destinations.empty? ? nil : { "X-ROUTER-DESTINATIONS" => destinations.join(",") }
       request :post, "https://#{@host}/rest/sites/#{site_uuid}/leads", lead.to_json, dest_headers
