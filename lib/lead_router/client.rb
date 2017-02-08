@@ -9,9 +9,10 @@ module LeadRouter
       @token = token
     end
 
-    def create_lead(site_uuid, lead)
+    def create_lead(site_uuid, lead, destinations=[])
       require_arg "site_uuid", site_uuid
-      request :post, "https://#{@host}/rest/sites/#{site_uuid}/leads", lead.to_json
+      dest_headers = destinations.empty? ? nil : { "X-ROUTER-DESTINATIONS" => destinations.join(",") }
+      request :post, "https://#{@host}/rest/sites/#{site_uuid}/leads", lead.to_json, dest_headers
     end
 
     def update_lead(site_uuid, lead_uuid, lead)
@@ -57,12 +58,14 @@ module LeadRouter
 
     private
 
-    def request(method, url, body)
+    def request(method, url, body, headers={})
+      headers.merge!({content_type: 'application/json', user_agent: "LeadRouterRuby/#{VERSION}"})
+
       RestClient::Request.execute(
         :method => method,
         :url => url,
         :payload => body,
-        :headers => {content_type: 'application/json', user_agent: "LeadRouterRuby/#{VERSION}"},
+        :headers => headers,
         :user => @user,
         :password => @token
       )
