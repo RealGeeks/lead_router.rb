@@ -16,9 +16,17 @@ class LeadRouterTest < Minitest::Test
 
   def test_create_lead
     client.expects(:request).with(:post, 'https://api.com/rest/sites/site-123/leads',
-                                  '{"email":"lead@gmail.com"}')
+                                  '{"email":"lead@gmail.com"}', nil)
 
     client.create_lead("site-123", {email: "lead@gmail.com"})
+  end
+
+  def test_create_lead_manual_destination
+    client.expects(:request).with(:post, 'https://api.com/rest/sites/site-123/leads',
+                                  '{"email":"lead@gmail.com"}',
+                                  {"X-ROUTER-DESTINATIONS" => "wibble"})
+
+    client.create_lead("site-123", {email: "lead@gmail.com"}, "wibble")
   end
 
   def test_update_lead
