@@ -60,6 +60,7 @@ module LeadRouter
     private
 
     def request(method, url, body, headers={})
+      headers ||= {}
       headers.merge!({content_type: 'application/json', user_agent: "LeadRouterRuby/#{VERSION}"})
 
       RestClient::Request.execute(
