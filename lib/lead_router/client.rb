@@ -33,9 +33,9 @@ module LeadRouter
       request :post, "https://#{@host}/rest/sites/#{site_uuid}/potential-seller-leads", lead.to_json
     end
 
-    # Send a request to update a user
+    # Send a request to notify a user was updated in the Lead Manager
     #
-    # For now the lead manager is allowed to send this request, every other
+    # Only the lead manager is allowed to send this request, every other
     # client will get 403
     #
     # Must be called with the full user object, all fields. See all fields
@@ -55,6 +55,14 @@ module LeadRouter
       user['name'] += " #{last}" unless last.nil?
 
       request :put, "https://#{@host}/rest/sites/#{site_uuid}/users/#{user_id}", user.to_json
+    end
+
+    # Send a request to notify a user was deleted in the Lead Manager
+    #
+    # Only the lead manager is allowed to send this request, every other
+    # client will get 403
+    def delete_user(site_uuid, user_id)
+      request :delete, "http://#{@host}/rest/sites/#{site_uuid}/users/#{user_id}"
     end
 
     private

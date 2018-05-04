@@ -75,6 +75,12 @@ class LeadRouterTest < Minitest::Test
     assert_equal({first_name: "Kat", email: "kat@mail.com"}, user)
   end
 
+  def test_delete_user
+    client.expects(:request).with(:delete, "http://api.com/rest/sites/site-123/users/1234")
+
+    client.delete_user("site-123", "1234")
+  end
+
   def test_add_activities
     client.expects(:request).with(:post, "https://api.com/rest/sites/site-123/leads/lead-abc/activities",
                                   '[{"type":"one"},{"type":"two"}]')
