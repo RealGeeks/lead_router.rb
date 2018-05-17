@@ -125,7 +125,15 @@ class LeadRouterTest < Minitest::Test
 
     client.send(:request, :post, "https://api.com/leads", '{"id":"123"}')
 
-    assert_request_performed(:post, "https://LM:secret@api.com/leads", '{"id":"123"}')
+    assert_requested(:post, "https://LM:secret@api.com/leads", body: '{"id":"123"}', headers: headers)
+  end
+
+  def test_request_empty_body
+    stub_request(:any, /.*/)
+
+    client.send(:request, :delete, "https://api.com/users/123")
+
+    assert_requested(:delete, "https://LM:secret@api.com/users/123", headers: headers)
   end
 
   def test_request_invalid_status_code
@@ -150,16 +158,10 @@ class LeadRouterTest < Minitest::Test
     assert_equal "", ex.http_body
   end
 
-  #
-  # Custom asserts
-  #
-
   private
 
-  def assert_request_performed(method, url, body)
-    assert_requested(method, url,
-                     :body => body,
-                     :headers => {'Content-Type'=>'application/json', 'User-Agent'=>"LeadRouterRuby/#{LeadRouter::VERSION}"})
+  def headers
+    {'Content-Type'=>'application/json', 'User-Agent'=>"LeadRouterRuby/#{LeadRouter::VERSION}"}
   end
 
 end
