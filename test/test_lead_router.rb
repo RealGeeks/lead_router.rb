@@ -125,7 +125,7 @@ class LeadRouterTest < Minitest::Test
 
     client.send(:request, :post, "https://api.com/leads", '{"id":"123"}')
 
-    assert_requested(:post, "https://LM:secret@api.com/leads", body: '{"id":"123"}', headers: headers)
+    assert_requested(:post, "https://api.com/leads", body: '{"id":"123"}', headers: headers)
   end
 
   def test_request_empty_body
@@ -133,7 +133,7 @@ class LeadRouterTest < Minitest::Test
 
     client.send(:request, :delete, "https://api.com/users/123")
 
-    assert_requested(:delete, "https://LM:secret@api.com/users/123", headers: headers)
+    assert_requested(:delete, "https://api.com/users/123", headers: headers)
   end
 
   def test_request_invalid_status_code
