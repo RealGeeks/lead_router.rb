@@ -2,7 +2,7 @@
 
 Send leads and activities to Lead Router, the Real Geeks Leads API.
 
-For more details see [our documentation](http://docs.realgeeks.com/outgoing_leads_api_developers).
+For more details see [our documentation](http://developers.realgeeks.com/outgoing-leads-api).
 
 ## Installation
 
@@ -33,7 +33,7 @@ lr = LeadRouter.new("receivers.leadrouter.realgeeks.com", "user", "token")
 ```
 
 with a client created use one the methods below. For details on which fields
-you can send for a `lead` or an `activity`, see our [API docs](http://docs.realgeeks.com/incoming_leads_api)
+you can send for a `lead` or an `activity`, see our [API docs](http://developers.realgeeks.com/incoming-leads-api)
 
 #### `create_lead(site_uuid, lead)`
 
