@@ -33,6 +33,12 @@ module LeadRouter
       request :post, "https://#{@host}/rest/sites/#{site_uuid}/potential-seller-leads", lead.to_json
     end
 
+    # Returns all users for the given site
+    def get_users(site_uuid)
+      require_arg "site_uuid", site_uuid
+      request :get, "https://#{@host}/rest/sites/#{site_uuid}/users"
+    end
+
     # Send a request to notify a user was updated in the Lead Manager
     #
     # Only the lead manager is allowed to send this request, every other

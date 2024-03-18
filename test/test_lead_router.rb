@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'webmock/minitest'
-require 'mocha/mini_test'
+require 'mocha/minitest'
 
 require 'lead_router'
 
@@ -42,6 +42,12 @@ class LeadRouterTest < Minitest::Test
                                   '{"email":"lead@gmail.com"}')
 
     client.update_lead("site-123", "lead-abc", {email: "lead@gmail.com"})
+  end
+
+    def test_get_users
+    client.expects(:request).with(:get, "https://api.com/rest/sites/site-123/users")
+
+    client.get_users("site-123")
   end
 
   def test_update_user
