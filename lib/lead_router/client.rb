@@ -62,7 +62,7 @@ module LeadRouter
     # Only the lead manager is allowed to send this request, every other
     # client will get 403
     def delete_user(site_uuid, user_id)
-      request :delete, "http://#{@host}/rest/sites/#{site_uuid}/users/#{user_id}"
+      request :delete, "https://#{@host}/rest/sites/#{site_uuid}/users/#{user_id}"
     end
 
     private
