@@ -76,7 +76,7 @@ class LeadRouterTest < Minitest::Test
   end
 
   def test_delete_user
-    client.expects(:request).with(:delete, "http://api.com/rest/sites/site-123/users/1234")
+    client.expects(:request).with(:delete, "https://api.com/rest/sites/site-123/users/1234")
 
     client.delete_user("site-123", "1234")
   end
